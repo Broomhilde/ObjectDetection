@@ -240,9 +240,12 @@ def process_output(clas_pred, bbox_pred, anchors, detect_thresh=0.25):
 
 
 def rescale_boxes(bboxes, t_sz: Tensor):
-
-    bboxes[:, 2:] = bboxes[:, 2:] * t_sz / 2
-    bboxes[:, :2] = (bboxes[:, :2] + 1) * t_sz / 2
+    try:
+        bboxes[:, 2:] = bboxes[:, 2:] * t_sz / 2
+        bboxes[:, :2] = (bboxes[:, :2] + 1) * t_sz / 2
+    except:
+        bboxes[2:] = bboxes[2:] * t_sz / 2
+        bboxes[:2] = (bboxes[:2] + 1) * t_sz / 2
 
     return bboxes
 
