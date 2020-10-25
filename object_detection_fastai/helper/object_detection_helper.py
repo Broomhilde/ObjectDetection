@@ -244,8 +244,7 @@ def rescale_boxes(bboxes, t_sz: Tensor):
         bboxes[:, 2:] = bboxes[:, 2:] * t_sz / 2
         bboxes[:, :2] = (bboxes[:, :2] + 1) * t_sz / 2
     except:
-        bboxes[2:] = bboxes[2:] * t_sz / 2
-        bboxes[:2] = (bboxes[:2] + 1) * t_sz / 2
+        pass
 
     return bboxes
 
