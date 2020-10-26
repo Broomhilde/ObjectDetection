@@ -37,8 +37,8 @@ class RetinaNet(nn.Module):
         self.box_regressor = self._head_subnet(4, n_anchors, 0., chs=chs, n_conv=n_conv)
 
     def _head_subnet(self, n_classes, n_anchors, final_bias=0., n_conv=4, chs=256):
-        layers = [self._conv2d_relu(chs, chs,ks=(13,3), bias=True) for _ in range(n_conv)]
-        layers += [conv2d(chs, n_classes * n_anchors,ks=(11,3), bias=True)]
+        layers = [self._conv2d_relu(chs, chs,ks=(13,3), padding=1, bias=True) for _ in range(n_conv)]
+        layers += [conv2d(chs, n_classes * n_anchors,ks=(11,3),padding=1, bias=True)]
         layers[-1].bias.data.zero_().add_(final_bias)
         layers[-1].weight.data.fill_(0)
         return nn.Sequential(*layers)
