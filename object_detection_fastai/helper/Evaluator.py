@@ -111,7 +111,10 @@ class Evaluator:
             [gts.append(g) for g in groundTruths if g[1] == c]
             npos = len(gts)
             # sort detections by decreasing confidence
-            dects = sorted(dects, key=lambda conf: conf[2], reverse=True)
+            try:
+                dects = sorted(dects, key=lambda conf: conf[2], reverse=True)
+            except:
+                pass
             TP = np.zeros(len(dects))
             FP = np.zeros(len(dects))
             FN = np.zeros(len(gts))
@@ -134,12 +137,15 @@ class Evaluator:
                         jmax = j
                 # Assign detection as true positive/don't care/false positive
                 if iouMax >= IOUThreshold:
-                    if det[dects[d][0]][jmax] == 0:
-                        TP[d] = 1  # count as true positive
-                        det[dects[d][0]][jmax] = 1  # flag as already 'seen'
-                        # print("TP")
-                    else:
-                        FP[d] = 1  # count as false positive
+                    try:
+                        if det[dects[d][0]][jmax] == 0:
+                            TP[d] = 1  # count as true positive
+                            det[dects[d][0]][jmax] = 1  # flag as already 'seen'
+                            # print("TP")
+                        else:
+                            FP[d] = 1  # count as false positive
+                    except:
+                        FP[d] = 1
                         # print("FP")
                 # - A detected "cat" is overlaped with a GT "cat" with IOU >= IOUThreshold.
                 else:
@@ -147,9 +153,10 @@ class Evaluator:
                     # print("FP")
             
             for gt in range(len(gts)):
-
-                d = [d for d in dects if d[0] == gts[gt][0]]
-
+                try:
+                    d = [d for d in dects if d[0] == gts[gt][0]]
+                except:
+                    d = []
                 iouMax = sys.float_info.min
                 # find maximum IOU
                 for j in range(len(d)):
